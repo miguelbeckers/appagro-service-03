@@ -1,0 +1,54 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  color: white;
+}
+
+.footer > .content {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 1200px;
+  flex-grow: 1;
+}
+
+.footer > .content > .signature {
+  display: flex;
+  font-style: italic;
+  min-width: 200px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.footer > .content > .more-info {
+  display: flex;
+  font-weight: bold;
+  min-width: 200px;
+  gap: 30px;
+  align-items: center;
+}
+
+.footer > .content > .icons {
+  min-width: 200px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 30px;
+  font-size: 14pt;
+}
+
+
+@media screen and (max-width: 800px) {
+  .footer > .content {
+      flex-direction: column;
+  }
+
+  .footer > .content > .signature,
+  .footer > .content > .more-info,
+  .footer > .content > .icons {
+      justify-content: center;
+  }
+}

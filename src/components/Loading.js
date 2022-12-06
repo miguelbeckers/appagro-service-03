@@ -1,9 +1,11 @@
-import { React } from 'react'
+import React from "react";
+import {Spin} from "antd";
+import "./Loading.css";
 
 function Loading() {
-  return <div className='map'>
-    loading
-  </div>
+    return <div className={"loading"}>
+        <Spin size="large"/>
+    </div>;
 }
 
 export default Loading;
