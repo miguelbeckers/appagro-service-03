@@ -1,44 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import { React, useEffect, useState } from 'react'
 import { Button, Form, Input, Radio } from 'antd';
+import { SaveOutlined } from '@ant-design/icons';
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { createUser, login } from "../store/actions/userAction";
-import "./SignUp.css";
+import { getUserByToken, updateUser, getUserById } from "../store/actions/userAction";
+import './UserForm.css'
 
-function SignUp() {
+function UserForm() {
   const dispatch = useDispatch();
+  const { id } = useParams();
 
-  const loading = useSelector(state => state.user.logged.loading);
-  const user = useSelector(state => state.user.logged.data);
+  const loading = useSelector(state => state.user.current.loading);
+  const current = useSelector(state => state.user.current.data);
+  const logged = useSelector(state => state.user.logged.data);
 
-  const [password, setPassoword] = useState("");
+  const [deleted, setDeleted] = useState("");
 
   useEffect(() => {
-    if (user.id) {
-      dispatch(login({
-        username: user.username,
-        password: password
-      }));
+    if (current.id !== id) {
+      dispatch(getUserById(id));
     }
-  }, [dispatch, user, password]);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (deleted == logged.id) {
+      dispatch(getUserByToken());
+    }
+  }, [dispatch, current]);
 
   const onFinish = (values) => {
-    setPassoword(values.password)
-    dispatch(createUser(values));
+    dispatch(updateUser(values, id));
+    setDeleted(current.id);
   };
 
-  return <div className={"signup"}>
-    <h1>Cadastre-se em Appagro</h1>
-    <div className={"content"}>
+  return <div className='user-form'>
+    <div className='content'>
       <Form
-        name="signup-form"
+        name="basic"
+        initialValues={{
+          name: current.name,
+          username: current.username,
+          userType: current.userType,
+        }}
+        requiredMark={false}
         onFinish={onFinish}
         layout="vertical"
-        requiredMark={false}
       >
         <Form.Item
-          name="name"
           label="Nome"
+          name="name"
           rules={[
             {
               required: true,
@@ -50,8 +60,8 @@ function SignUp() {
         </Form.Item>
 
         <Form.Item
-          name="username"
           label="Usuário"
+          name="username"
           rules={[
             {
               required: true,
@@ -63,16 +73,16 @@ function SignUp() {
         </Form.Item>
 
         <Form.Item
+          label="Password"
           name="password"
-          label="Senha"
           rules={[
             {
               required: true,
-              message: 'Senha não informada',
+              message: 'Please input your password!',
             },
           ]}
         >
-          <Input.Password type="password" />
+          <Input.Password />
         </Form.Item>
 
         <Form.Item
@@ -95,18 +105,15 @@ function SignUp() {
           <Button
             type="primary"
             htmlType="submit"
-            className="login-form-button"
+            icon={<SaveOutlined />}
             loading={loading}
           >
-            Cadastrar
+            Salvar
           </Button>
         </Form.Item>
       </Form>
     </div>
-    <div>
-      Já tem uma conta? <Link to="/login">Entre!</Link>
-    </div>
-  </div>;
+  </div>
 }
 
-export default SignUp;
+export default UserForm;

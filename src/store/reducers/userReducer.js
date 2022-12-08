@@ -4,7 +4,7 @@ import messageConstant from "../../common/messageConstant";
 const defaultState = {
     logged: {
         loading: false,
-        token: null,
+        data: {},
         message: {},
         checked: false,
     },
@@ -76,19 +76,48 @@ const userReducer = (state = defaultState, action) => {
                     message: { content: "User loaded", type: messageConstant.INFO }
                 }
             };
+        case userConstant.GET_LOGGED_USER_LOADING:
+            return {
+                ...state,
+                logged: {
+                    ...state.logged,
+                    loading: true
+                }
+            };
+        case userConstant.GET_LOGGED_USER_FAIL:
+            return {
+                ...state,
+                logged: {
+                    ...state.logged,
+                    loading: false,
+                    message: { content: action.payload, type: messageConstant.FAIL },
+                    checked: true
+                }
+            };
+        case userConstant.GET_LOGGED_USER_SUCCESS:
+            return {
+                ...state,
+                logged: {
+                    ...state.logged,
+                    loading: false,
+                    data: action.payload,
+                    message: { content: "User loaded", type: messageConstant.INFO },
+                    checked: true
+                }
+            };
         case userConstant.CREATE_USER_LOADING:
             return {
                 ...state,
-                current: {
-                    ...state.current,
+                logged: {
+                    ...state.logged,
                     loading: true
                 }
             };
         case userConstant.CREATE_USER_FAIL:
             return {
                 ...state,
-                current: {
-                    ...state.current,
+                logged: {
+                    ...state.logged,
                     loading: false,
                     message: { content: action.payload, type: messageConstant.FAIL }
                 }
@@ -96,8 +125,8 @@ const userReducer = (state = defaultState, action) => {
         case userConstant.CREATE_USER_SUCCESS:
             return {
                 ...state,
-                current: {
-                    ...state.current,
+                logged: {
+                    ...state.logged,
                     loading: false,
                     data: action.payload,
                     message: { content: "User created", type: messageConstant.SUCCESS }
@@ -171,8 +200,7 @@ const userReducer = (state = defaultState, action) => {
                 logged: {
                     ...state.logged,
                     loading: false,
-                    message: { content: action.payload, type: messageConstant.FAIL },
-                    checked: true
+                    message: { content: action.payload, type: messageConstant.FAIL }
                 }
             };
         case userConstant.LOGIN_SUCCESS:
@@ -181,9 +209,8 @@ const userReducer = (state = defaultState, action) => {
                 logged: {
                     ...state.logged,
                     loading: false,
-                    token: action.payload,
                     message: { content: "User logged in", type: messageConstant.INFO },
-                    checked: true
+                    checked: false
                 }
             };
         case userConstant.LOGOUT:
@@ -192,12 +219,15 @@ const userReducer = (state = defaultState, action) => {
                 logged: {
                     ...state.logged,
                     loading: false,
-                    token: null,
-                    checked: false
+                    data: {}
                 },
                 current: {
                     ...state.current,
                     data: {}
+                },
+                list: {
+                    ...state.list,
+                    data: []
                 }
             };
         default:

@@ -1,26 +1,6 @@
 import userService from "../services/userService";
 import userConstant from "../constants/userConstant";
 
-export const checkToken = () => async dispatch => {
-    try {
-        dispatch({
-            type: userConstant.LOGIN_LOADING
-        });
-
-        await userService.hello();
-
-        dispatch({
-            type: userConstant.LOGIN_SUCCESS,
-            payload: JSON.parse(localStorage.getItem('token'))
-        });
-    } catch (e) {
-        dispatch({
-            type: userConstant.LOGIN_FAIL,
-            payload: e.response && e.response.data ? e.response.data.message || e.response.data.error : e.message
-        });
-    }
-};
-
 export const login = (data) => async dispatch => {
     try {
         dispatch({
@@ -32,7 +12,6 @@ export const login = (data) => async dispatch => {
 
         dispatch({
             type: userConstant.LOGIN_SUCCESS,
-            payload: JSON.parse(localStorage.getItem('token'))
         });
     } catch (e) {
         dispatch({
@@ -94,18 +73,18 @@ export const getUserByUsername = (username) => async dispatch => {
 export const getUserByToken = () => async dispatch => {
     try {
         dispatch({
-            type: userConstant.GET_USER_LOADING
+            type: userConstant.GET_LOGGED_USER_LOADING
         });
 
         const res = await userService.getUserByToken();
 
         dispatch({
-            type: userConstant.GET_USER_SUCCESS,
+            type: userConstant.GET_LOGGED_USER_SUCCESS,
             payload: res.data
         });
     } catch (e) {
         dispatch({
-            type: userConstant.GET_USER_FAIL,
+            type: userConstant.GET_LOGGED_USER_FAIL,
             payload: e.response && e.response.data ? e.response.data.message || e.response.data.error : e.message
         });
     }
@@ -151,7 +130,7 @@ export const createUser = (data) => async dispatch => {
     }
 };
 
-export const updateUser = (id, data) => async dispatch => {
+export const updateUser = (data, id) => async dispatch => {
     try {
         dispatch({
             type: userConstant.UPDATE_USER_LOADING

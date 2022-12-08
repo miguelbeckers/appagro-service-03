@@ -1,5 +1,19 @@
-.user-page {
-  background-color: yellow;
-  min-width: 200px;
-  min-height: 300px;
+.user-profile {
+  /* background-color: gray;
+  padding: 10px; */
+  gap: 10px;
+  width: 1200px;
+  display: flex;
+  justify-content: center;
+}
+
+.user-profile > .content {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: 600px;
+  height: fit-content;
+  padding: 20px;
+  border-radius: 5px;
+  gap: 10px;
 }

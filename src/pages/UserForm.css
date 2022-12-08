@@ -1,0 +1,14 @@
+.user-form {
+  gap: 10px;
+  width: 1200px;
+  display: flex;
+  justify-content: center;
+}
+
+.user-form > .content {
+  background-color: white;
+  width: 600px;
+  height: fit-content;
+  padding: 20px;
+  border-radius: 10px;
+}

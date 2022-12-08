@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 import PageNotFound from "./pages/PageNotFound";
 import MapPage from "./pages/MapPage";
 import User from "./pages/User";
+import UserForm from "./pages/UserForm";
 
 const routes = (isLogged) => {
   return isLogged ? <div className="page">
@@ -16,10 +17,11 @@ const routes = (isLogged) => {
       <Routes>
         <Route path="*" element={<PageNotFound />} />
         <Route exect path="/" element={<Navigate to="/map" />} />
-        <Route path="login" element={<Navigate to="/map" />} />
-        <Route path="signup" element={<Navigate to="/map" />} />
-        <Route path="/user" element={<User />} />
+        <Route path="/login" element={<Navigate to="/map" />} />
+        <Route path="/signup" element={<Navigate to="/map" />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/user/:id" element={<User />} />
+        <Route path="/user/:id/edit" element={<UserForm />} />
       </Routes>
     </div>
     <Footer />

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { checkToken, getUserByToken } from "./store/actions/userAction";
+import { getUserByToken } from "./store/actions/userAction";
 import "./App.css";
 
 import Loading from "./components/Loading";
@@ -13,23 +13,16 @@ function App() {
   const dispatch = useDispatch();
 
   const checked = useSelector(state => state.user.logged.checked);
-  const logged = useSelector(state => state.user.logged.token);
   const loading = useSelector(state => state.user.logged.loading);
-  const user = useSelector(state => state.user.current.data);
+  const user = useSelector(state => state.user.logged.data);
 
   useEffect(() => {
     if(!checked){
-      dispatch(checkToken());
+      dispatch(getUserByToken());
     }
   }, [dispatch, checked]);
 
-  useEffect(() => {
-    if (logged && !user.id){
-      dispatch(getUserByToken());
-    }
-  }, [dispatch, logged, user]);
-
-  return loading || !checked ? <Loading /> : routes(logged);
+  return loading || !checked ? <Loading /> : routes(user.id);
 }
 
 const AppWrapper = () => {

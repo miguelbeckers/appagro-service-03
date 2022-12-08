@@ -3,7 +3,7 @@ import { Button, Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { login, checkToken } from "../store/actions/userAction";
+import { login } from "../store/actions/userAction";
 import "./Login.css";
 
 function Login() {
@@ -13,15 +13,8 @@ function Login() {
     dispatch(login(values));
   };
 
-  const sayHello = () => {
-    dispatch(checkToken())
-  }
-
   return <div className={"login"}>
     <h1>Entre em Appagro</h1>
-    <Button onClick={sayHello}>
-      teste
-    </Button>
     <div className={"content"}>
       <Form
         name="login-form"
@@ -41,6 +34,7 @@ function Login() {
             placeholder="Usuário"
           />
         </Form.Item>
+
         <Form.Item
           name="password"
           rules={[
@@ -55,15 +49,20 @@ function Login() {
             prefix={<LockOutlined className="site-form-item-icon" />}
           />
         </Form.Item>
+
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
             Entrar
           </Button>
         </Form.Item>
       </Form>
     </div>
     <div>
-      Ainda não tem uma conta? <Link to="/signup">Entre!</Link>
+      Ainda não tem uma conta? <Link to="/signup">Cadastre-se!</Link>
     </div>
   </div>;
 }

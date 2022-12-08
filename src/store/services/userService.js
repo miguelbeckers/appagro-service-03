@@ -1,16 +1,9 @@
 import http from "../../config";
 
-
 class UserServices {
 
   hello() {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.get("/user/hello", config);
+    return http.get("/user/hello");
   }
 
   login(data) {
@@ -18,73 +11,31 @@ class UserServices {
   }
 
   getAllUsers() {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.get("/user", config);
+    return http.get("/user");
   }
 
   getUserByUsername(username) {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.get(`/user/${username}`, config);
+    return http.get(`/user/${username}`);
   }
 
   getUserByToken() {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.get("/user/token", config);
+    return http.get("/user/token");
   }
 
   getUserById(id) {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.get(`/user/${id}`, config);
+    return http.get(`/user/${id}`);
   }
 
   createUser(data) {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.post("/user", data, config);
+    return http.post("/user", data);
   }
 
   updateUser(id, data) {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.put(`/user/${id}`, data, config);
+    return http.put(`/user/${id}`, data);
   }
 
   deleteUser(id) {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-      }
-    }
-    return http.delete(`/user/${id}`, config);
+    return http.delete(`/user/${id}`);
   }
 }
 

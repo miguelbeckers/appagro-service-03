@@ -10,16 +10,16 @@ const { Item } = Menu;
 
 function Header() {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user.current.data);
+  const user = useSelector(state => state.user.logged.data);
 
   const onLogout = () => {
     dispatch(logout());
   };
 
   const menu = (
-    <Menu className={"menu"}>
-      <Link to="/user">
-        <Item icon={<ProfileOutlined />}>Perfil</Item>
+    <Menu mode="vertical">
+      <Link to={`/user/${user.id}`}>
+        <Item icon={<ProfileOutlined/>}>Perfil</Item>
       </Link>
       <Item icon={<LogoutOutlined />} onClick={onLogout}>Logout</Item>
     </Menu>

@@ -1,82 +1,72 @@
-import { React } from 'react'
-import { Button, Form, Input, Radio } from 'antd';
+import { React, useEffect, useState } from 'react'
+import { Avatar, Descriptions, Button, Menu } from 'antd';
+import { UserOutlined, EditOutlined, DeleteOutlined, PushpinOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, Link, Navigate } from "react-router-dom";
+import { getUserById, deleteUser, logout } from '../store/actions/userAction';
 import './User.css'
 
 function User() {
-  const onFinish = (values) => {
-    console.log(values)
-  };
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const loading = useSelector(state => state.user.current.loading);
+  const current = useSelector(state => state.user.current.data);
+  const logged = useSelector(state => state.user.logged.data);
 
-  return <div className='user-page'>
-    <Form
-      name="signup-form"
-      onFinish={onFinish}
-      layout={{
-        labelCol: { span: 8 },
-        wrapperCol: { span: 16 },
-      }}
-    >
-      <Form.Item
-        name="name"
-        label="Nome"
-        rules={[
-          {
-            required: true,
-            message: 'Nome não informado',
-          },
-        ]}
+  const [deleted, setDeleted] = useState("");
+
+  useEffect(() => {
+    if (!current.id) {
+      dispatch(getUserById(id));
+    }
+  }, [dispatch, current, id]);
+
+  useEffect(() => {
+    if (!current.id && deleted == logged.id) {
+      dispatch(logout());
+    } else {
+      <Navigate to="/map" />
+    }
+  }, [dispatch, current, logged, id]);
+
+  const onDelete = () => {
+    dispatch(deleteUser(id));
+    setDeleted(current.id);
+  }
+
+  return <div className='user-profile'>
+    <Avatar size={150} icon={<UserOutlined />} shape="square" />
+    <div className='content'>
+      <Descriptions
+        column={1}
+        title={<h2>{current.name}</h2>}
+        extra={
+          <Link to={`/user/${current.id}/edit`}>
+            <Button icon={<EditOutlined />} loading={loading}>
+              Editar
+            </Button>
+          </Link>
+        }
       >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="username"
-        label="Usuário"
-        rules={[
-          {
-            required: true,
-            message: 'Usuário não informado',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        label="Senha"
-        rules={[
-          {
-            required: true,
-            message: 'Senha não informada',
-          },
-        ]}
-      >
-        <Input.Password type="password" />
-      </Form.Item>
-      <Form.Item
-        name="userType"
-        label="Tipo"
-        rules={[
-          {
-            required: true,
-            message: 'Tipo não selecionado',
-          },
-        ]}
-      >
-        <Radio.Group>
-          <Radio.Button value="USER">Usuário</Radio.Button>
-          <Radio.Button value="ADMIN">Administrador</Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
+        <Descriptions.Item label="Usuário">{current.username}</Descriptions.Item>
+        <Descriptions.Item label="Tipo">{current.userType}</Descriptions.Item>
+        <Descriptions.Item label="Criado em">{current.createdAt}</Descriptions.Item>
+        <Descriptions.Item label="Editado em">{current.updatedAt}</Descriptions.Item>
+      </Descriptions>
+
+      <Menu mode="vertical" style={{ border: "1px solid white" }}>
+        <Link to={"/map"}>
+          <Menu.Item icon={<PushpinOutlined />}>Ver áreas</Menu.Item>
+        </Link>
+        <Menu.Item
+          danger={true}
+          icon={<DeleteOutlined />}
+          onClick={onDelete}
         >
-          Cadastrar
-        </Button>
-      </Form.Item>
-    </Form>
+          Excluir conta
+        </Menu.Item>
+      </Menu>
+    </div>
   </div>
 }
 
