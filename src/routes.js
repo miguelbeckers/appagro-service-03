@@ -20,8 +20,8 @@ const routes = (isLogged) => {
         <Route path="/login" element={<Navigate to="/map" />} />
         <Route path="/signup" element={<Navigate to="/map" />} />
         <Route path="/map" element={<MapPage />} />
-        <Route path="/user/:id" element={<User />} />
-        <Route path="/user/:id/edit" element={<UserForm />} />
+        <Route path="/user/:username" element={<User />} />
+        <Route path="/user/:username/edit" element={<UserForm />} />
       </Routes>
     </div>
     <Footer />

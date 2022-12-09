@@ -15,7 +15,7 @@ class UserServices {
   }
 
   getUserByUsername(username) {
-    return http.get(`/user/${username}`);
+    return http.get(`/user/username/${username}`);
   }
 
   getUserByToken() {

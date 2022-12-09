@@ -3,12 +3,12 @@ import { Button, Form, Input, Radio } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserByToken, updateUser, getUserById } from "../store/actions/userAction";
+import { getUserByToken, updateUser, getUserByUsername } from "../store/actions/userAction";
 import './UserForm.css'
 
 function UserForm() {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { username } = useParams();
 
   const loading = useSelector(state => state.user.current.loading);
   const current = useSelector(state => state.user.current.data);
@@ -17,8 +17,8 @@ function UserForm() {
   const [edited, setEdited] = useState("");
 
   useEffect(() => {
-    dispatch(getUserById(id));
-  }, [dispatch, id]);
+    dispatch(getUserByUsername(username));
+  }, [dispatch, username]);
 
   useEffect(() => {
     if (edited === logged.id) {
@@ -27,7 +27,7 @@ function UserForm() {
   }, [dispatch, edited, logged]);
 
   const onFinish = (values) => {
-    dispatch(updateUser(values, id));
+    dispatch(updateUser(values, current.id));
     setEdited(current.id);
   };
 
@@ -71,7 +71,7 @@ function UserForm() {
         </Form.Item>
 
         <Form.Item
-          label="Password"
+          label="Senha"
           name="password"
           rules={[
             {

@@ -18,7 +18,7 @@ function Header() {
 
   const menu = (
     <Menu mode="vertical">
-      <Link to={`/user/${user.id}`}>
+      <Link to={`/user/${user.username}`}>
         <Item icon={<ProfileOutlined/>}>Perfil</Item>
       </Link>
       <Item icon={<LogoutOutlined />} onClick={onLogout}>Logout</Item>

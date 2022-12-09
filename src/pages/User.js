@@ -8,18 +8,20 @@ import './User.css'
 
 function User() {
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const username = "silvio";
+  const { username } = useParams();
 
   const loading = useSelector(state => state.user.current.loading);
   const current = useSelector(state => state.user.current.data);
   const logged = useSelector(state => state.user.logged.data);
 
+  const createdAt = current.id ? new Date(current.createdAt).toLocaleString() : null;
+  const updatedAt = current.id ? new Date(current.updatedAt).toLocaleString() : null;
+
   const [deleted, setDeleted] = useState("");
 
   useEffect(() => {
     dispatch(getUserByUsername(username));
-  }, [dispatch]);
+  }, [dispatch, username]);
 
   useEffect(() => {
     if (!current.id && deleted === logged.id) {
@@ -27,10 +29,10 @@ function User() {
     } else {
       <Navigate to="/map" />
     }
-  }, [dispatch, current, logged, deleted, id]);
+  }, [dispatch, current, logged, deleted]);
 
   const onDelete = () => {
-    dispatch(deleteUser(id));
+    dispatch(deleteUser(current.id));
     setDeleted(current.id);
   }
 
@@ -41,7 +43,7 @@ function User() {
         column={1}
         title={<h2>{current.name}</h2>}
         extra={
-          <Link to={`/user/${current.id}/edit`}>
+          <Link to={`/user/${current.username}/edit`}>
             <Button icon={<EditOutlined />} loading={loading}>
               Editar
             </Button>
@@ -50,8 +52,8 @@ function User() {
       >
         <Descriptions.Item label="Usuário">{current.username}</Descriptions.Item>
         <Descriptions.Item label="Tipo">{current.userType}</Descriptions.Item>
-        <Descriptions.Item label="Criado em">{current.createdAt}</Descriptions.Item>
-        <Descriptions.Item label="Editado em">{current.updatedAt}</Descriptions.Item>
+        <Descriptions.Item label="Criado em">{createdAt}</Descriptions.Item>
+        <Descriptions.Item label="Editado em">{updatedAt}</Descriptions.Item>
       </Descriptions>
 
       <Menu mode="vertical" style={{ border: "1px solid white" }}>
