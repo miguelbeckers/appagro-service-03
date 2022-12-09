@@ -14,23 +14,21 @@ function UserForm() {
   const current = useSelector(state => state.user.current.data);
   const logged = useSelector(state => state.user.logged.data);
 
-  const [deleted, setDeleted] = useState("");
+  const [edited, setEdited] = useState("");
 
   useEffect(() => {
-    if (current.id !== id) {
-      dispatch(getUserById(id));
-    }
-  }, [dispatch]);
+    dispatch(getUserById(id));
+  }, [dispatch, id]);
 
   useEffect(() => {
-    if (deleted == logged.id) {
+    if (edited === logged.id) {
       dispatch(getUserByToken());
     }
-  }, [dispatch, current]);
+  }, [dispatch, edited, logged]);
 
   const onFinish = (values) => {
     dispatch(updateUser(values, id));
-    setDeleted(current.id);
+    setEdited(current.id);
   };
 
   return <div className='user-form'>

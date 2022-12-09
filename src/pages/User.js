@@ -3,12 +3,14 @@ import { Avatar, Descriptions, Button, Menu } from 'antd';
 import { UserOutlined, EditOutlined, DeleteOutlined, PushpinOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, Navigate } from "react-router-dom";
-import { getUserById, deleteUser, logout } from '../store/actions/userAction';
+import { deleteUser, logout, getUserByUsername } from '../store/actions/userAction';
 import './User.css'
 
 function User() {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const username = "silvio";
+
   const loading = useSelector(state => state.user.current.loading);
   const current = useSelector(state => state.user.current.data);
   const logged = useSelector(state => state.user.logged.data);
@@ -16,18 +18,16 @@ function User() {
   const [deleted, setDeleted] = useState("");
 
   useEffect(() => {
-    if (!current.id) {
-      dispatch(getUserById(id));
-    }
-  }, [dispatch, current, id]);
+    dispatch(getUserByUsername(username));
+  }, [dispatch]);
 
   useEffect(() => {
-    if (!current.id && deleted == logged.id) {
+    if (!current.id && deleted === logged.id) {
       dispatch(logout());
     } else {
       <Navigate to="/map" />
     }
-  }, [dispatch, current, logged, id]);
+  }, [dispatch, current, logged, deleted, id]);
 
   const onDelete = () => {
     dispatch(deleteUser(id));
