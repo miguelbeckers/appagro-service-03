@@ -1,6 +1,6 @@
-import http from "../../config";
+import http from "../../config-01";
 
-class UserServices {
+class UserService {
 
   hello() {
     return http.get("/user/hello");
@@ -39,4 +39,4 @@ class UserServices {
   }
 }
 
-export default new UserServices();
+export default new UserService();

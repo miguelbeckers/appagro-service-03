@@ -43,7 +43,7 @@ function User() {
         column={1}
         title={<h2>{current.name}</h2>}
         extra={
-          <Link to={`/user/${current.username}/edit`}>
+          <Link to={`/user/${current.username}/form`}>
             <Button icon={<EditOutlined />} loading={loading}>
               Editar
             </Button>
@@ -57,7 +57,7 @@ function User() {
       </Descriptions>
 
       <Menu mode="vertical" style={{ border: "1px solid white" }}>
-        <Link to={"/map"}>
+        <Link to={`/user/${current.username}/areas`}>
           <Menu.Item icon={<PushpinOutlined />}>Ver áreas</Menu.Item>
         </Link>
         <Menu.Item

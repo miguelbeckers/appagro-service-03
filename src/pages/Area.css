@@ -1,0 +1,26 @@
+.area{
+  height: fit-content;
+  width: 1000px;
+  border-radius: 5px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.area > .map {
+  height: 400px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.area > .info {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.info-buttons {
+  display: flex;
+  gap: 5px;
+}

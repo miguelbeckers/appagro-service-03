@@ -1,12 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Avatar, Dropdown, Menu } from "antd";
+import { Avatar, Dropdown } from "antd";
 import { LogoutOutlined, UserOutlined, ProfileOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/actions/userAction";
 import "./Header.css";
-
-const { Item } = Menu;
 
 function Header() {
   const dispatch = useDispatch();
@@ -16,14 +14,19 @@ function Header() {
     dispatch(logout());
   };
 
-  const menu = (
-    <Menu mode="vertical">
-      <Link to={`/user/${user.username}`}>
-        <Item icon={<ProfileOutlined/>}>Perfil</Item>
-      </Link>
-      <Item icon={<LogoutOutlined />} onClick={onLogout}>Logout</Item>
-    </Menu>
-  );
+  const items = [
+    {
+      key: '1',
+      icon: <ProfileOutlined />,
+      label: <Link to={`/user/${user.username}`}>Perfil</Link>,
+    },
+    {
+      key: '2',
+      label: "Logout",
+      icon: <LogoutOutlined />,
+      onClick: onLogout,
+    }
+  ];
 
   const userInfo = (
     <div className={"user"}>
@@ -43,7 +46,7 @@ function Header() {
       </Link>
       <div className="actions">
         <Dropdown
-          overlay={menu}
+          menu={{ items }}
           placement="bottomCenter"
           trigger={"click"}
           arrow

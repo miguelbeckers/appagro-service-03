@@ -22,7 +22,7 @@ function App() {
     }
   }, [dispatch, checked]);
 
-  return loading || !checked ? <Loading /> : routes(user.id);
+  return loading || !checked ? <Loading /> : routes(user);
 }
 
 const AppWrapper = () => {
