@@ -1,31 +1,44 @@
-import { React, useEffect } from "react";
+import { React, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import { GoogleMap, LoadScript, Polygon } from '@react-google-maps/api';
 import { Descriptions, Button, Table } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { getAreaById } from "../store/actions/areaAction";
-
-import { getAllDevices, createDevice, updateDevice, deleteDevice } from "../store/actions/deviceAction";
+import { getAreaById, deleteArea } from "../store/actions/areaAction";
+import { getAllDevices } from "../store/actions/deviceAction";
+import { getAllMeasurements } from "../store/actions/measurementAction";
+import { useNavigate } from "react-router-dom";
 
 import googleMapsApiKey from "../maps";
 import "./Area.css";
 
 function Area() {
   const dispatch = useDispatch();
-  const { area } = useParams();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(getAreaById(area));
-  }, [dispatch, area]);
+  const { area } = useParams();
+  const [deleted, setDeleted] = useState(false);
 
   const current = useSelector(state => state.area.current.data);
   const loading = useSelector(state => state.area.current.loading);
   const devices = useSelector(state => state.device.list.data);
-  console.log(devices);
+  const measurements = useSelector(state => state.measurement.list.data);
+  const logged = useSelector(state => state.user.logged.data);
 
   const createdAt = current.id ? new Date(current.createdAt).toLocaleString() : null;
   const updatedAt = current.id ? new Date(current.updatedAt).toLocaleString() : null;
+
+  useEffect(() => {
+    dispatch(getAreaById(area));
+    dispatch(getAllDevices());
+    dispatch(getAllMeasurements());
+  }, [dispatch, area]);
+
+  useEffect(() => {
+    if (current.id && deleted) {
+      navigate(`/user/${logged.username}/areas`)
+    }
+  }, [dispatch, navigate, area, current, logged, deleted]);
 
   const center = {
     lat: -25.127395240273035,
@@ -61,25 +74,23 @@ function Area() {
     },
   ];
 
-  const dataSource = devices.map(device => {
-    return {name: device.name, time: "nada", value: "valor"}
-  });
+  const dataSource = devices.length > 0 && measurements.length > 0 ?
+    devices.map(device => {
+      const id = device.measurements[0];
+      const measurement = measurements.find(e => e._id === id);
+      return {
+        area: device.area,
+        name: device.name,
+        time: measurement.createdAt,
+        value: measurement.value
+      };
+    }).filter(
+      device => device.area === current.id
+    ) : [];
 
-
-  const onGetDevices = () => {
-    dispatch(getAllDevices());
-  }
-
-  const onCreateDevice = (data) => {
-    dispatch(createDevice(data));
-  }
-
-  const onUpdateDevice = (data) => {
-    dispatch(updateDevice(data));
-  }
-
-  const onDeleteDevice = (id) => {
-    dispatch(deleteDevice(id));
+  const onDelete = () => {
+    dispatch(deleteArea(current.id, logged.id));
+    setDeleted(true);
   }
 
   return <div className="area">
@@ -109,12 +120,20 @@ function Area() {
         title={<h2>{current.name}</h2>}
         extra={
           <div className="info-buttons">
-            <Link to={`/user/${current.username}/form`}>
-              <Button icon={<EditOutlined />} loading={loading}>
+            <Link to={`/area/${current.id}/form`}>
+              <Button
+                icon={<EditOutlined />}
+                loading={loading}
+              >
                 Editar
               </Button>
             </Link>
-            <Button icon={<DeleteOutlined />} loading={loading} danger={true}>
+            <Button
+              icon={<DeleteOutlined />}
+              loading={loading}
+              danger={true}
+              onClick={onDelete}
+            >
               Excluir
             </Button>
           </div>
@@ -125,20 +144,6 @@ function Area() {
       </Descriptions>
 
       <Table columns={columns} dataSource={dataSource} />
-    </div>
-    <div>
-      <Button onClick={onGetDevices}>
-        get
-      </Button>
-      <Button onClick={onCreateDevice}>
-        post
-      </Button>
-      <Button onClick={onUpdateDevice}>
-        update
-      </Button>
-      <Button onClick={onDeleteDevice}>
-        delete
-      </Button>
     </div>
   </div>;
 }

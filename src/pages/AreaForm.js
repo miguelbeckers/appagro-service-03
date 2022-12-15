@@ -1,8 +1,9 @@
-import { React, useState, useCallback, useRef } from 'react'
+import { React, useState, useCallback, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleMap, LoadScript, Polygon } from '@react-google-maps/api';
 import { Button, Form, Input, Select } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
 import { createArea } from "../store/actions/areaAction"
 
 import googleMapsApiKey from "../maps";
@@ -10,12 +11,29 @@ import './AreaForm.css'
 
 function AreaForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const url = window.location.href;
+  const create = url.includes("new");
 
   const logged = useSelector(state => state.user.logged.data);
   const area = useSelector(state => state.area.current.data);
-  console.log(area);
+  const loading = useSelector(state => state.area.current.loading);
 
-  const [path, setPath] = useState([
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (area.id && saved && !loading) {
+      navigate(`/user/${logged.username}/areas`)
+    }
+  }, [dispatch, navigate, saved, area, logged, loading]);
+
+  const currentPath = area.id ? area.coordinates.map(coordinate => {
+    const latlng = coordinate.split(', ');
+    return { lat: Number(latlng[0]), lng: Number(latlng[1]) }
+  }) : [];
+
+  const [path, setPath] = useState(create ? [
     {
       lat: -25.129406654112547,
       lng: -54.22587966556522,
@@ -32,7 +50,7 @@ function AreaForm() {
       lat: -25.12914139603012,
       lng: -54.22329267561591,
     },
-  ]);
+  ] : currentPath);
 
   const center = {
     lat: -25.127395240273035,
@@ -96,6 +114,7 @@ function AreaForm() {
   const onFinish = (values) => {
     const data = { ...values, coordinates: coordinates }
     dispatch(createArea(data, logged.id));
+    setSaved(true);
   }
 
   return <div className='area-form'>
@@ -131,6 +150,10 @@ function AreaForm() {
         requiredMark={false}
         layout="inline"
         onFinish={onFinish}
+        initialValues={{
+          name: create ? undefined : area.name,
+          areaType: create ? undefined : area.areaType,
+        }}
       >
         <Form.Item
           label="Nome"
@@ -143,7 +166,7 @@ function AreaForm() {
           ]}
           style={{ flexGrow: 1 }}
         >
-          <Input  />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -165,6 +188,7 @@ function AreaForm() {
             type="primary"
             htmlType="submit"
             icon={<SaveOutlined />}
+            loading={loading}
           >
             Salvar
           </Button>

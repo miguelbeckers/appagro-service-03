@@ -24,7 +24,8 @@ const routes = (logged) => {
         <Route path="/signup" element={<Navigate to={home} />} />
         <Route path="/user/:username/areas" element={<AreaList />} />
         <Route path="/area/:area" element={<Area />} />
-        <Route path="/area/form" element={<AreaForm />} />
+        <Route path="/area/:area/form" element={<AreaForm />} />
+        <Route path="/area/new/form" element={<AreaForm />} />
         <Route path="/user/:username" element={<User />} />
         <Route path="/user/:username/form" element={<UserForm />} />
       </Routes>

@@ -9,6 +9,10 @@ class AreaService {
   getAllAreas() {
     return http.get("/area");
   }
+
+  getAreasByUser(id) {
+    return http.get(`/area/user/${id}`);
+  }
   
   getAreaById(id) {
     return http.get(`/area/${id}`);
@@ -22,8 +26,8 @@ class AreaService {
     return http.put(`/area/${id}`, data);
   }
 
-  deleteArea(id) {
-    return http.delete(`/area/${id}`);
+  deleteArea(areaId, userId) {
+    return http.delete(`/area/${areaId}/user/${userId}`);
   }
 }
 
