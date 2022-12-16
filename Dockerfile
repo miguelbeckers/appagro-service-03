@@ -7,9 +7,9 @@ WORKDIR /app
 COPY . .
 # ==== BUILD =====
 # Install dependencies (npm ci makes sure the exact versions in the lockfile gets installed)
-RUN npm ci 
+RUN npm install --production
 # Build the app
-RUN npm run build
+#RUN npm run build
 # ==== RUN =======
 # Set the env to "production"
 ENV NODE_ENV production
