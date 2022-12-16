@@ -10,4 +10,4 @@ RUN npm install --production
 COPY . .
 
 EXPOSE 3000
-CMD [ "npx", "serve", "build"  ]
+CMD [ "npx", "serve", "build" ]
